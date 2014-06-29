@@ -1,5 +1,1 @@
-=========
-hipchatpy
-=========
-
-Simple HipChat client.
+Simple `HipChat <https://www.hipchat.com>`_ client library.
