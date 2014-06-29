@@ -224,4 +224,3 @@ class HipChatClient:
         response = self.get(params, 'rooms/show')
 
         return response
-
