@@ -9,10 +9,12 @@ setup(
     version="0.0.2",
     packages=['hipchatpy'],
     install_requires=open('requirements.txt').read().splitlines(),
+    description="Simple HipChat client library",
     long_description=open('README.txt').read(),
     author='Takahiro Ikeuchi',
     author_email='takahiro.ikeuchi@gmail.com',
     author_twitter='@iktakahiro',
     url='https://github.com/iktakahiro/hipchatpy',
+    keywords="HipChat client",
 )
 

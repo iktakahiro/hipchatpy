@@ -49,7 +49,7 @@ class HipChatClient:
 
         return response
 
-    def create(self, name, owner_user_id, privacy='private', guest_access=0):
+    def create_room(self, name, owner_user_id, privacy='private', guest_access=0):
         """Creates a new room.
 
         Args:
@@ -77,7 +77,7 @@ class HipChatClient:
 
         return response
 
-    def delete(self, room_id):
+    def delete_room(self, room_id):
         """Deletes a room and kicks the current participants.
 
         Args:
@@ -99,7 +99,7 @@ class HipChatClient:
 
         return response
 
-    def history(self, room_id, date='recent', timezone='Asia/Tokyo'):
+    def get_room_history(self, room_id, date='recent', timezone='Asia/Tokyo'):
         """Fetch chat history for this room.
 
         Args:
@@ -125,7 +125,7 @@ class HipChatClient:
 
         return response
 
-    def list(self):
+    def get_room_list(self):
         """List rooms for this group.
 
         Args:
@@ -145,7 +145,7 @@ class HipChatClient:
 
         return response
 
-    def message(self, room_id, message_from, message, message_format='html', notify=0, color='yellow'):
+    def send_message(self, room_id, message_from, message, message_format='html', notify=0, color='yellow'):
         """Send a message to a room.
 
         Args:
@@ -178,7 +178,7 @@ class HipChatClient:
 
         return response
 
-    def topic(self, room_id, topic, topic_from='API'):
+    def set_topic(self, room_id, topic, topic_from='API'):
         """Set a room's topic.
 
         Args:
@@ -205,7 +205,7 @@ class HipChatClient:
 
         return response
 
-    def show(self, room_id):
+    def get_room_details(self, room_id):
         """Get room details.
 
         Args:
