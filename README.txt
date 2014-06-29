@@ -1,0 +1,5 @@
+=========
+hipchatpy
+=========
+
+Simple HipChat client.
