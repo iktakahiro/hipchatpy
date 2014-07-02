@@ -6,13 +6,10 @@ __author__ = 'Takahiro Ikeuchi'
 import requests
 from copy import deepcopy
 
-BASE_URI = "https://api.hipchat.com/v1/"
-AUTH_TOKEN = ''
-
 
 class HipChatClient:
 
-    def __init__(self, base_uri=BASE_URI, auth_token=AUTH_TOKEN, response_format='json'):
+    def __init__(self, auth_token, base_uri='https://api.hipchat.com/v1/', response_format='json'):
 
         self.base_uri = base_uri
         self.auth_token = auth_token
