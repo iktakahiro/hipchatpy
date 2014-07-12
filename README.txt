@@ -3,16 +3,6 @@ hipchatpy
 
 hipchatpy is `HipChat`_ client library for specific logging.
 
-+-----------+------------+----------+----------+
-| Method    | LogLevel   | Notify   | Color    |
-+===========+============+==========+==========+
-| info()    | INFO       | False    | green    |
-+-----------+------------+----------+----------+
-| warn()    | WARNING    | True     | yellow   |
-+-----------+------------+----------+----------+
-| error()   | ERROR      | True     | red      |
-+-----------+------------+----------+----------+
-
 Install
 -------
 
@@ -47,12 +37,25 @@ Sample Code
     # LogLevel: ERROR
     logging.error(message='ERROR Message')
 
-.. _HipChat: https://www.hipchat.com
+Correspondence table
+~~~~~~~~~~~~~~~~~~~~
+
++-----------+---------------+----------+----------+
+| Method    | LogLevel      | Notify   | Color    |
++===========+===============+==========+==========+
+| info()    | INFO (1)      | False    | green    |
++-----------+---------------+----------+----------+
+| warn()    | WARNING (2)   | True     | yellow   |
++-----------+---------------+----------+----------+
+| error()   | ERROR (3)     | True     | red      |
++-----------+---------------+----------+----------+
 
 Command line
 ------------
 
 .. code:: sh
+
+    export HIPCHAT_TOKEN=your_api_token
 
     # LogLevel: INFO
     hipchatpy -r 10000 -m 'INFO Message' -l 1
@@ -62,3 +65,5 @@ Command line
 
     # LogLevel: ERROR
     hipchatpy -r 10000 -m 'ERROR Message' -l 3
+
+.. _HipChat: https://www.hipchat.com
