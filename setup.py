@@ -16,7 +16,7 @@ setup(
     url='https://github.com/iktakahiro/hipchatpy',
     keywords=["HipChat", "HipChat Client"],
     license='MIT',
-    classifies = [
+    classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.4",
         "Topic :: System :: Logging",
