@@ -6,7 +6,7 @@ __author__ = 'Takahiro Ikeuchi'
 
 setup(
     name="hipchatpy",
-    version="0.1.0",
+    version="0.1.1",
     packages=['hipchatpy'],
     install_requires=open('requirements.txt').read().splitlines(),
     description="Simple HipChat client library",
@@ -24,7 +24,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "hipchatpy=hipchatpy:main",
+            "hipchatpy=hipchatpy.hipchatpy:main",
         ],
     },
 )
