@@ -3,154 +3,53 @@
 
 __author__ = 'Takahiro Ikeuchi'
 
+import os
 import requests
+import json
+from argparse import ArgumentParser
 from copy import deepcopy
 
-BASE_URI = "https://api.hipchat.com/v1/"
-AUTH_TOKEN = ''
 
+class HipChatLogging:
 
-class HipChatClient:
+    def __init__(self, auth_token, room_id, base_uri='https://api.hipchat.com/v2/', response_format='json'):
 
-    def __init__(self, base_uri=BASE_URI, auth_token=AUTH_TOKEN, response_format='json'):
-
-        self.base_uri = base_uri
         self.auth_token = auth_token
+        self.room_id = room_id
+        self.base_uri = base_uri
         self.response_format = response_format
 
-        self.base_params = {
-            "auth_token": self.auth_token,
-            "format": self.response_format
-        }
+    def __post(self, post_params, endpoint):
+        """POST HTTP Request.
 
-    def post(self, params, endpoint):
+        Args:
+            post_params:
+            endpoint:
 
-        __params = deepcopy(params)
-        __params.update(self.base_params)
+        Returns:
+            response:
 
-        uri = self.base_uri + endpoint
+        Raises:
+            TODO:
+
+        """
+
+        __post_params = deepcopy(post_params)
+
+        headers = {'content-type': 'application/json'}
+
+        uri = self.base_uri + endpoint + '?auth_token=' + self.auth_token
 
         http = requests.session()
-        response = http.post(uri, params=__params)
+        response = http.post(uri, data=json.dumps(__post_params), headers=headers)
         http.close()
 
         return response
 
-    def get(self, params, endpoint):
-
-        __params = deepcopy(params)
-        __params.update(self.base_params)
-
-        uri = self.base_uri + endpoint
-
-        http = requests.session()
-        response = http.get(uri, params=__params)
-        http.close()
-
-        return response
-
-    def create_room(self, name, owner_user_id, privacy='private', guest_access=0):
-        """Creates a new room.
-
-        Args:
-            name:
-            owner_user_id:
-            privacy:
-            guest_access:
-
-        Returns:
-            response:
-
-        Raises:
-            TODO:
-
-        """
-
-        params = {
-            "name": name,
-            "owner_user_id": owner_user_id,
-            "privacy": privacy,
-            "guest_access": guest_access
-        }
-
-        response = self.post(params, 'rooms/create')
-
-        return response
-
-    def delete_room(self, room_id):
-        """Deletes a room and kicks the current participants.
-
-        Args:
-            room_id:
-
-        Returns:
-            response:
-
-        Raises:
-            TODO:
-
-        """
-
-        params = {
-            "room_id": room_id
-        }
-
-        response = self.post(params, 'rooms/delete')
-
-        return response
-
-    def get_room_history(self, room_id, date='recent', timezone='Asia/Tokyo'):
-        """Fetch chat history for this room.
-
-        Args:
-            room_id:
-            date:
-            timezone:
-
-        Returns:
-            response:
-
-        Raises:
-            TODO:
-
-        """
-
-        params = {
-            "room_id": room_id,
-            "date": date,
-            "timezone": timezone
-        }
-
-        response = self.get(params, 'rooms/history')
-
-        return response
-
-    def get_room_list(self):
-        """List rooms for this group.
-
-        Args:
-            Nothing
-
-        Returns:
-            response:
-
-        Raises:
-            TODO:
-
-        """
-
-        params = {}
-
-        response = self.get(params, 'rooms/list')
-
-        return response
-
-    def send_message(self, room_id, message_from, message, message_format='html', notify=0, color='yellow'):
+    def __send_notification(self, message, message_format='html', notify=False, color='yellow'):
         """Send a message to a room.
 
         Args:
-            room_id: ID or name of the room.
-            from: Name the message will appear be sent from.
             message: The message body. 10,000 characters max.
             message_format: Determines how the message is treated by our server and rendered inside HipChat applications.
             notify: Whether or not this message should trigger a notification for people in the room.
@@ -166,61 +65,64 @@ class HipChatClient:
         """
 
         params = {
-            "room_id": room_id,
-            "from": message_from,
             "message": message,
             "message_format": message_format,
             "notify": notify,
             "color": color
         }
 
-        response = self.post(params, 'rooms/message')
+        endpoint = 'room/' + str(self.room_id) + '/notification'
 
-        return response
+        response = self.__post(params, endpoint)
 
-    def set_topic(self, room_id, topic, topic_from='API'):
-        """Set a room's topic.
+        return response.status_code
 
-        Args:
-            room_id: ID or name of the room.
-            topic: The topic body. 250 characters max
-            from: Name of the service changing the topic.
+    def info(self, message):
+
+        return self.__send_notification(message=message, notify=False, color='green')
+
+    def warn(self, message):
+
+        return self.__send_notification(message=message, notify=True, color='yellow')
+
+    def error(self, message):
+
+        return self.__send_notification(message=message, notify=True, color='red')
 
 
-        Returns:
-            response:
+def main():
 
-        Raises:
-            TODO:
+    try:
+        auth_token = os.environ["HIPCHAT_TOKEN"]
 
-        """
+    except KeyError:
+        print('ERROR: Please set the HIPCHAT_TOKEN variable in your environment.')
 
-        params = {
-            "room_id": room_id,
-            "topic": topic,
-            "from": topic_from,
-        }
+    else:
+        parser = ArgumentParser(description='hipchatpy command line tool')
+        parser.add_argument('-r', '--room', required=True, help='Room ID')
+        parser.add_argument('-m', '--message', type=str, required=True, help='Message')
+        parser.add_argument('-l', '--level', type=int, default=1, choices=[1, 2, 3])
 
-        response = self.post(params, 'rooms/topic')
+        args = parser.parse_args()
 
-        return response
+        client = HipChatLogging(auth_token, args.room)
 
-    def get_room_details(self, room_id):
-        """Get room details.
+        if args.level == 1:
+            response = client.info(args.message)
 
-        Args:
-            room_id: ID or name of the room.
+        if args.level == 2:
+            response = client.warn(args.message)
 
-        Returns:
-            response:
+        if args.level == 3:
+            response = client.error(args.message)
 
-        Raises:
-            TODO:
+        if response == 204:
+            print(True)
 
-        """
+        else:
+            print(False)
 
-        params = {"room_id": room_id}
+if __name__ == '__main__':
 
-        response = self.get(params, 'rooms/show')
-
-        return response
+    main()
