@@ -1,6 +1,12 @@
 # hipchatpy
 
-Simple [HipChat](https://www.hipchat.com) client library.
+hipchatpy is [HipChat](https://www.hipchat.com) client library for specific logging.
+
+Method | LogLevel | Notify | Color
+:----: | :------: | :----: | :----:
+info() | INFO | False | green
+warn() | WARNING | True | yellow
+error() | ERROR | True | red
 
 ## Install
 
@@ -12,26 +18,36 @@ pip install hipchatpy
 
 - requests
 
-## Sample
+## Sample Code
 
 ```python
 import hipchatpy
 
 AUTH_TOKEN = 'hogehoge'
+ROOM_ID = 10000
 
 # Create a new instance.
-client = hipchatpy.HipChatClient(AUTH_TOKEN)
+logging = hipchatpy.HipChatLogging(AUTH_TOKEN, ROOM_ID)
 
-# Create a room.
-client.create_room(name='Test_ROOM', owner_user_id=10000):
+# LogLevel: INFO
+logging.info(message='INFO Message')
 
-# Send a message.
-client.send_message(room_id=10000, message_from='hipchatpy', message='Test Message')
+# LogLevel: WARN
+logging.warn(message='WARN Message')
 
-# Send a message (Back ground Color = Red).
-client.send_message(room_id=10000, message_from='hipchatpy', message='Alert', color='red')
-
-# Get list rooms for your group.
-client.get_room_list()
+# LogLevel: ERROR
+logging.error(message='ERROR Message')
 ```
 
+## Command line
+
+```sh
+# LogLevel: INFO
+hipchatpy -r 10000 -m 'INFO Message' -l 1
+
+# LogLevel: WARN
+hipchatpy -r 10000 -m 'WARN Message' -l 2
+
+# LogLevel: ERROR
+hipchatpy -r 10000 -m 'ERROR Message' -l 3
+```
