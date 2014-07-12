@@ -2,12 +2,6 @@
 
 hipchatpy is [HipChat](https://www.hipchat.com) client library for specific logging.
 
-Method | LogLevel | Notify | Color
-:----: | :------: | :----: | :----:
-info() | INFO | False | green
-warn() | WARNING | True | yellow
-error() | ERROR | True | red
-
 ## Install
 
 ```python
@@ -39,9 +33,19 @@ logging.warn(message='WARN Message')
 logging.error(message='ERROR Message')
 ```
 
+### Correspondence table
+
+Method | LogLevel | Notify | Color
+:----: | :------: | :----: | :----:
+info() | INFO (1) | False | green
+warn() | WARNING (2) | True | yellow
+error() | ERROR (3) | True | red
+
 ## Command line
 
 ```sh
+export HIPCHAT_TOKEN=your_api_token
+
 # LogLevel: INFO
 hipchatpy -r 10000 -m 'INFO Message' -l 1
 
