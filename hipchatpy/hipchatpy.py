@@ -10,7 +10,7 @@ from argparse import ArgumentParser
 from copy import deepcopy
 
 
-class HipChatLogging:
+class HipChatLogger:
 
     def __init__(self, auth_token, room_id, base_uri='https://api.hipchat.com/v2/', response_format='json'):
 
@@ -106,7 +106,7 @@ def main():
 
         args = parser.parse_args()
 
-        client = HipChatLogging(auth_token, args.room)
+        client = HipChatLogger(auth_token, args.room)
 
         if args.level == 1:
             response = client.info(args.message)
@@ -123,6 +123,3 @@ def main():
         else:
             print(False)
 
-if __name__ == '__main__':
-
-    main()

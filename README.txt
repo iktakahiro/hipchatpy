@@ -26,7 +26,7 @@ Sample Code
     ROOM_ID = 10000
 
     # Create a new instance.
-    logging = hipchatpy.HipChatLogging(AUTH_TOKEN, ROOM_ID)
+    logging = hipchatpy.HipChatLogger(AUTH_TOKEN, ROOM_ID)
 
     # LogLevel: INFO
     logging.info(message='INFO Message')
