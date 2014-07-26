@@ -77,17 +77,17 @@ class HipChatLogger:
 
         return response.status_code
 
-    def info(self, message):
+    def info(self, message, message_format='html'):
 
-        return self.__send_notification(message=message, notify=False, color='green')
+        return self.__send_notification(message=message, message_format=message_format, notify=False, color='green')
 
-    def warn(self, message):
+    def warn(self, message, message_format='html'):
 
-        return self.__send_notification(message=message, notify=True, color='yellow')
+        return self.__send_notification(message=message, message_format=message_format, notify=True, color='yellow')
 
-    def error(self, message):
+    def error(self, message, message_format='html'):
 
-        return self.__send_notification(message=message, notify=True, color='red')
+        return self.__send_notification(message=message, message_format=message_format, notify=True, color='red')
 
 
 def main():
@@ -103,19 +103,20 @@ def main():
         parser.add_argument('-r', '--room', required=True, help='Room ID')
         parser.add_argument('-m', '--message', type=str, required=True, help='Message')
         parser.add_argument('-l', '--level', type=int, default=1, choices=[1, 2, 3])
+        parser.add_argument('-f', '--format', type=str, default='html', choices=['html', 'text'])
 
         args = parser.parse_args()
 
         client = HipChatLogger(auth_token, args.room)
 
         if args.level == 1:
-            response = client.info(args.message)
+            response = client.info(args.message, message_format=args.format)
 
         if args.level == 2:
-            response = client.warn(args.message)
+            response = client.warn(args.message, message_format=args.format)
 
         if args.level == 3:
-            response = client.error(args.message)
+            response = client.error(args.message, message_format=args.format)
 
         if response == 204:
             print(True)
