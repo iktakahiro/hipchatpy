@@ -11,13 +11,15 @@ from copy import deepcopy
 
 
 class HipChatLogger:
-
-    def __init__(self, auth_token, room_id, base_uri='https://api.hipchat.com/v2/', response_format='json'):
+    def __init__(self, auth_token, room_id, base_uri='https://api.hipchat.com/v2/', response_format='json',
+                 http_proxy='', https_proxy=''):
 
         self.auth_token = auth_token
         self.room_id = room_id
         self.base_uri = base_uri
         self.response_format = response_format
+        self.http_proxy = http_proxy
+        self.https_proxy = https_proxy
 
     def __post(self, post_params, endpoint):
         """POST HTTP Request.
@@ -33,15 +35,23 @@ class HipChatLogger:
             TODO:
 
         """
-
         __post_params = deepcopy(post_params)
 
         headers = {'content-type': 'application/json'}
 
+        proxy_dict = {}
+        if self.http_proxy:
+            proxy_dict['http'] = self.http_proxy
+        if self.https_proxy:
+            proxy_dict['https'] = self.https_proxy
+
         uri = self.base_uri + endpoint + '?auth_token=' + self.auth_token
 
+        if not proxy_dict:
+            proxy_dict = None
+
         http = requests.session()
-        response = http.post(uri, data=json.dumps(__post_params), headers=headers)
+        response = http.post(uri, data=json.dumps(__post_params), headers=headers, proxies=proxy_dict)
         http.close()
 
         return response
@@ -91,7 +101,6 @@ class HipChatLogger:
 
 
 def main():
-
     try:
         auth_token = os.environ["HIPCHAT_TOKEN"]
 
