@@ -8,7 +8,7 @@ __author__ = 'Takahiro Ikeuchi'
 
 setup(
     name="hipchatpy",
-    version="0.1.15",
+    version="0.1.16",
     py_modules=['hipchatpy'],
     package_dir={'': 'hipchatpy'},
     install_requires=open('requirements.txt').read().splitlines(),
